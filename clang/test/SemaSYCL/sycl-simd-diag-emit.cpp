@@ -5,4 +5,4 @@
 
 // expected-no-diagnostics
 
-__thread void *x;
+void *x;
