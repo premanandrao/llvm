@@ -1761,8 +1761,13 @@ public:
   // Emit any deferred diagnostics for FD
   void emitDeferredDiags(FunctionDecl *FD, bool ShowCallStack) {
     auto It = S.DeviceDeferredDiags.find(FD);
-    if (It == S.DeviceDeferredDiags.end())
+    if (It == S.DeviceDeferredDiags.end()) {
+      if (FD->isTemplateInstantiation()) {
+        FD = FD->getTemplateInstantiationPattern();
+        emitDeferredDiags(FD, ShowCallStack);
+      }
       return;
+    }
     bool HasWarningOrError = false;
     bool FirstDiag = true;
     for (Sema::DeviceDeferredDiagnostic &D : It->second) {
@@ -1792,6 +1797,7 @@ public:
         FirstDiag = false;
       }
     }
+    return;
   }
 };
 } // namespace
