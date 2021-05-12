@@ -4215,6 +4215,7 @@ void Sema::finalizeSYCLDelayedAnalysis(const FunctionDecl *Caller,
   if ((Reason & DeviceDiagnosticReason::Sycl) == DeviceDiagnosticReason::None &&
       !isFDReachableFromSyclDevice(Callee, Caller))
     return;
+<<<<<<< HEAD
 
   // If Callee has a SYCL attribute, no diagnostic needed.
   if (Callee->hasAttr<SYCLDeviceAttr>() || Callee->hasAttr<SYCLKernelAttr>())
@@ -4225,6 +4226,15 @@ void Sema::finalizeSYCLDelayedAnalysis(const FunctionDecl *Caller,
   // this undefined function is used to trigger a compiling error.
   if (!Callee->isDefined() && !Callee->getBuiltinID() &&
       !isSYCLUndefinedAllowed(Callee, getSourceManager())) {
+=======
+
+  // If Callee has a SYCL attribute, no diagnostic needed.
+  if (Callee->hasAttr<SYCLDeviceAttr>() || Callee->hasAttr<SYCLKernelAttr>())
+    return;
+
+  // Diagnose if this is an undefined function and it is not a builtin.
+  if (!Callee->isDefined() && !Callee->getBuiltinID()) {
+>>>>>>> eda65f5d48dd ([SYCL] Emit diagnostics appropriately when coexisting with OpenMP)
     Diag(Loc, diag::err_sycl_restrict) << Sema::KernelCallUndefinedFunction;
     Diag(Callee->getLocation(), diag::note_previous_decl) << Callee;
     Diag(Caller->getLocation(), diag::note_called_by) << Caller;
