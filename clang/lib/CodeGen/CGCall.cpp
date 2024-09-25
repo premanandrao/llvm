@@ -3939,8 +3939,7 @@ void CodeGenFunction::EmitFunctionEpilog(const CGFunctionInfo &FI,
       LValue ArgVal =
           LValue::MakeAddr(ArgAddr, RetTy, getContext(), BaseInfo, TBAAInfo);
       EmitStoreOfScalar(
-          EmitLoadOfScalar(MakeAddrLValue(ReturnValue, RetTy), EndLoc), ArgVal,
-          /*isInit*/ true);
+          Builder.CreateLoad(ReturnValue), ArgVal, /*isInit*/ true);
       break;
     }
     }

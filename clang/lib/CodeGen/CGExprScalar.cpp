@@ -449,10 +449,9 @@ public:
 
     if (Value *Result = ConstantEmitter(CGF).tryEmitConstantExpr(E)) {
       if (E->isGLValue())
-        return CGF.EmitLoadOfScalar(
-            Address(Result, CGF.convertTypeForLoadStore(E->getType()),
-                    CGF.getContext().getTypeAlignInChars(E->getType())),
-            /*Volatile*/ false, E->getType(), E->getExprLoc());
+        return CGF.Builder.CreateLoad(Address(
+            Result, CGF.ConvertTypeForMem(E->getType()),
+            CGF.getContext().getTypeAlignInChars(E->getType())));
       return Result;
     }
     return Visit(E->getSubExpr());

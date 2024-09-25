@@ -428,7 +428,8 @@ CGRecordLowering::accumulateBitFields(bool isNonVirtualBaseType,
         continue;
       }
       uint64_t BitOffset = getFieldBitOffset(*Field);
-      llvm::Type *Type = Types.ConvertTypeForMem(Field->getType());
+      llvm::Type *Type =
+          Types.ConvertTypeForMem(Field->getType(), /*ForBitField=*/true);
       // If we don't have a run yet, or don't live within the previous run's
       // allocated storage then we allocate some storage and start a new run.
       if (Run == FieldEnd || BitOffset >= Tail) {
