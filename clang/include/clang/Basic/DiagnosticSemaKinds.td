@@ -822,6 +822,9 @@ def warn_unreachable_association : Warning<
   InGroup<UnreachableCodeGenericAssoc>;
 
 /// Built-in functions.
+def err_builtin_invalid_argument_count : Error<
+  "builtin %plural{0:takes no arguments|1:takes one argument|"
+  ":requires exactly %0 arguments}0">;
 def ext_implicit_lib_function_decl : ExtWarn<
   "implicitly declaring library function '%0' with type %1">,
   InGroup<ImplicitFunctionDeclare>;
@@ -12328,7 +12331,11 @@ def err_builtin_invalid_arg_type: Error <
   "a floating point type|"
   "a vector of integers|"
   "an unsigned integer|"
-  "an 'int'}1 (was %2)">;
+  "an 'int'|"
+  "a function pointer}1 (was %2)">;
+
+def err_builtin_invalid_arg_value: Error<
+  "%ordinal0 argument must be a strictly positive value (was %1)">;
 
 def err_builtin_matrix_disabled: Error<
   "matrix types extension is disabled. Pass -fenable-matrix to enable it">;
